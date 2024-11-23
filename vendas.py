@@ -1,27 +1,20 @@
 import numpy as np
 from datetime import datetime
 
-# Função para carregar e preparar os dados
 def carregar_dados(arquivo_csv):
-    # Define os tipos das colunas
     tipos = [('data', 'U10'), ('regiao', 'U20'), ('produto', 'U20'), ('quantidade', 'f8'), ('preco_unitario', 'f8')]
     
-    # Carrega os dados com os tipos especificados
     dados = np.genfromtxt(arquivo_csv, delimiter=',', dtype=tipos, encoding='utf-8', skip_header=1)
     
-    # Converte a coluna de datas para objetos datetime
     datas = np.array([datetime.strptime(row['data'], "%Y-%m-%d") for row in dados])
     regioes = dados['regiao']
     produtos = dados['produto']
     quantidade = dados['quantidade']
     preco_unitario = dados['preco_unitario']
-    valor_total = quantidade * preco_unitario  # Calcula o valor total
-    
-    # Retorna os dados como uma matriz consolidada
+    valor_total = quantidade * preco_unitario  
     matriz_dados = np.column_stack((datas, regioes, produtos, quantidade, preco_unitario, valor_total))
     return matriz_dados
 
-# Funções de análise
 def analise_estatistica(dados):
     valor_total = dados[:, 5].astype(float)
     
@@ -62,9 +55,9 @@ def analise_temporal(dados):
     
     return resultados
 
-# Função principal
+
 def main():
-    arquivo_csv = '/mnt/data/vendas.csv'  # Substitua pelo caminho do seu arquivo CSV
+    arquivo_csv = '/mnt/data/vendas.csv'  
     dados = carregar_dados(arquivo_csv)
     estatisticas = analise_estatistica(dados)
     print("Análise Estatística:", estatisticas)
